@@ -8,7 +8,5 @@ RUN  ./node.sh
 RUN apt-get install -y nodejs
 RUN apt-get install build-essential -y
 RUN npm install
-RUN npm install jdbc
-
-## node index.js <host> <port> <schema> <username> <password>
+EXPOSE 1212
 CMD ["node", "index.js"]
