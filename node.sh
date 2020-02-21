@@ -117,9 +117,9 @@ ${bold}${NODENAME} is no longer actively supported!${normal}
     ${bold}https://github.com/nodesource/distributions${normal}
 "
         echo
-        echo "Continuing in 20 seconds ..."
+        echo "Continuing in 3 seconds ..."
         echo
-        sleep 20
+        sleep 3
     fi
 }
 
@@ -145,9 +145,9 @@ This script, located at ${bold}https://deb.nodesource.com/setup${normal}, used t
 "
 
         echo
-        echo "Continuing in 20 seconds (press Ctrl-C to abort) ..."
+        echo "Continuing in 3 seconds (press Ctrl-C to abort) ..."
         echo
-        sleep 20
+        sleep 3
     fi
 }
 

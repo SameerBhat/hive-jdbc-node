@@ -1,0 +1,43 @@
+FROM openjdk:7
+
+RUN apt-get install build-essential -y
+
+RUN apt-get update
+
+ENV MYSQL_USER=mysql \
+    MYSQL_VERSION=5.7.28 \
+    MYSQL_DATA_DIR=/var/lib/mysql \
+    MYSQL_RUN_DIR=/run/mysqld \
+    MYSQL_LOG_DIR=/var/log/mysql
+
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server;
+
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 3306/tcp
+
+
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+
+
+#RUN curl -sL https://deb.nodesource.com/setup_11.x |   bash -
+RUN chmod +x node.sh 
+RUN  ./node.sh
+RUN apt-get install -y nodejs
+
+RUN npm install
+RUN npm install jdbc
+
+
+
+
+
+
+ENTRYPOINT ["/sbin/entrypoint.sh"]
+# node index.js <host> <port> <schema> <username> <password>
+# CMD ["node", "index.js"]

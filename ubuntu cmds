@@ -1,0 +1,33 @@
+ssh -p 2200 sameer@localhost
+scp -P 2200 lib/* sameer@localhost:/home/sameer/node/lib
+
+Sameer123@
+
+
+Database name: workspace_dev
+table_name: dom_nap_raw_trans_data
+
+fnum                    string
+line                    int
+time                    string
+speaker                 string
+paragraph               string
+annotators_name         string
+promise1                string
+pwrd1                   string
+promise_phrase1         string
+promise2                string
+pwrd2                   string
+promise_phrase2         string
+promise_comment         string
+topic1                  string
+twrd1                   string
+pharse1                 string
+topic2                  string
+twrd2                   string
+pharse2                 string
+sentiment_phrase1       string
+sentiment_phrase2       string
+cpn_name                string
+agent                   string
+customer                string
