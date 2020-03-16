@@ -85,7 +85,7 @@ function getItemsFromDB(conn, tableName, limit, callbackFunction, errorFunction)
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeQuery("SELECT * FROM " + tableName + " LIMIT " + limit, function (
+      statement.executeQuery("SELECT * FROM " + tableName + " WHERE fnum='" + limit+"'", function (
         err,
         resultset
       ) {
