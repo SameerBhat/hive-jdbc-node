@@ -67,12 +67,13 @@ hive.reserve(function (err, connObj) {
 
 
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
-      const tableName = req.params.tableName;
+      const tableName = 'label_'+req.params.tableName;
       const fnum = req.params.fnum;
      // console.log(tableName);
       //console.log(fnum);
       req.body.forEach(element => {
-        console.log(element);
+        console.log(element[0]);
+
       });
       
     });
@@ -94,15 +95,61 @@ hive.reserve(function (err, connObj) {
 
 
 function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) {
-
-
-
   conn.createStatement(function (err, statement) {
     if (err) {
       errorFunction(err);
     } else {
       // console.log("Executing query.");
       statement.executeQuery("SELECT * FROM " + tableName + " WHERE fnum='" + fnum+"'", function (
+        err,
+        resultset
+      ) {
+        if (err) {
+          console.log(err);
+          errorFunction(err);
+        } else {
+          // console.log("Query Output :");
+          resultset.toObjArray(function (err, result) {
+            if (result != null) {
+
+              if (result.length > 0) {
+
+                callbackFunction(result);
+                // console.log("foo :" + util.inspect(result));
+
+
+                // for (var i = 0; i < result.length; i++) {
+                //   var row = result[i];
+                //   console.log(row["foo"]);
+                // }
+              } else {
+                callbackFunction([]);
+              }
+            } else {
+              callbackFunction([]);
+            }
+            //errorFunction(null, resultset);
+          });
+        }
+      });
+    }
+  });
+
+
+
+
+
+}
+
+
+
+function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction) {
+  conn.createStatement(function (err, statement) {
+    if (err) {
+      errorFunction(err);
+    } else {
+      // console.log("Executing query.");
+      statement.executeQuery(`INSERT INTO table ${tableName} values ('${data[0]}',${data[1]},'${data[2]}','${data[3]}','${data[4]}','${data[5]}','${data[6]}','${data[7]}','${data[8]}','${data[9]}','${data[10]}','${data[11]}','${data[12]}','${data[13]}','${data[14]}','${data[15]}','${data[16]}','${data[17]}','${data[18]}','${data[19]}','${data[20]}','${data[21]}','${data[22]}','${data[23]}');`, function (
         err,
         resultset
       ) {
