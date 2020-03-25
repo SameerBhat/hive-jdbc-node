@@ -78,7 +78,7 @@ hive.reserve(function (err, connObj) {
         var newdata = [];
 
         data.forEach(element => {
-          newdata.push(element.replace(/[^\w\s]/gi, ' '));
+          newdata.push(element.replace(/[^\w\s]/gi, ' ') || null);
         });
 
 
