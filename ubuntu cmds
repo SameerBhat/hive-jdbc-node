@@ -6,3 +6,10 @@ scp -P 2200 hive-jdbc-node.zip  sameer@localhost:/home/sameer
 
 
 scp -P 2200 sameer@localhost:/home/sameer/nodecomp.zip /Users/sameerbhat/Projects/www
+
+
+scp -P 2200 index.js sameer@localhost:/home/sameer/node
+
+
+curl http://localhost:1212/api/transcripts/dom_nap_raw_trans_data/6
+http://10.0.2.15:1212/api/transcripts/dom_nap_raw_trans_data/6

@@ -15,9 +15,8 @@ if (!jinst.isJvmCreated()) {
 
 
 var conf = {
-  url: "jdbc:mysql://localhost/test?user=root&password=root",
+  url: "jdbc:mysql://localhost/workspace_dev?user=root&password=root",
   drivername: "org.apache.hive.jdbc.HiveDriver",
-  //    drivername: "com.mysql.jdbc.Driver",
   properties: {}
 };
 
@@ -36,15 +35,12 @@ hive.reserve(function (err, connObj) {
     //console.log("Connection : " + connObj.uuid);
     var conn = connObj.conn;
 
-    app.get('/api/transcripts/:tableName/:limit', function (req, res) {
+    app.get('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName;
-      const limit = req.params.limit;
+      const fnum = req.params.fnum;
 
-      getItemsFromDB(conn, tableName, limit, function (data) {
-
-
+      getItemsFromDB(conn, tableName, fnum, function (data) {
           console.log(data);
-
           res.send(JSON.stringify(data));
 
 
@@ -77,7 +73,7 @@ hive.reserve(function (err, connObj) {
 
 
 
-function getItemsFromDB(conn, tableName, limit, callbackFunction, errorFunction) {
+function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) {
 
 
 
@@ -86,7 +82,7 @@ function getItemsFromDB(conn, tableName, limit, callbackFunction, errorFunction)
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeQuery("SELECT * FROM " + tableName + " LIMIT " + limit, function (
+      statement.executeQuery("SELECT * FROM " + tableName + " WHERE fnum='" + fnum+"'", function (
         err,
         resultset
       ) {
