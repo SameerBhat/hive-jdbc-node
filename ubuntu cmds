@@ -1,2 +1,8 @@
 ssh -p 2200 sameer@localhost
 scp -P 2200 lib/* sameer@localhost:/home/sameer/node/lib
+
+
+scp -P 2200 hive-jdbc-node.zip  sameer@localhost:/home/sameer
+
+
+scp -P 2200 sameer@localhost:/home/sameer/nodecomp.zip /Users/sameerbhat/Projects/www
