@@ -67,12 +67,28 @@ hive.reserve(function (err, connObj) {
 
 
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
-      const tableName = 'label_'+req.params.tableName;
+      //const tableName = 'label_'+req.params.tableName;
+      const tableName = 'label_dom_nap_raw_trans_data';
       const fnum = req.params.fnum;
      // console.log(tableName);
       //console.log(fnum);
-      req.body.forEach(element => {
-        console.log(element[0]);
+      req.body.forEach(data => {
+        console.log(data);
+
+        insertItemsToDB(conn, tableName, data, function (data) {
+           // console.log(data);
+           // res.send(JSON.stringify(data))
+  
+          }, function (error) {
+  
+            if (error != null) {
+              console.log(error);
+            }
+  
+          }
+  
+        );
+
 
       });
       
@@ -157,28 +173,18 @@ function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction)
           console.log(err);
           errorFunction(err);
         } else {
-          // console.log("Query Output :");
-          resultset.toObjArray(function (err, result) {
-            if (result != null) {
+          
+           console.log(resultset);
 
-              if (result.length > 0) {
+          // resultset.toObjArray(function (err, result) {
+          //   if (result != null) {
 
-                callbackFunction(result);
-                // console.log("foo :" + util.inspect(result));
-
-
-                // for (var i = 0; i < result.length; i++) {
-                //   var row = result[i];
-                //   console.log(row["foo"]);
-                // }
-              } else {
-                callbackFunction([]);
-              }
-            } else {
-              callbackFunction([]);
-            }
-            //errorFunction(null, resultset);
-          });
+             
+          //   } else {
+          //     callbackFunction([]);
+          //   }
+           
+          // });
         }
       });
     }
