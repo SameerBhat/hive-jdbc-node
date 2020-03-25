@@ -7,17 +7,16 @@ var app = express();
 if (!jinst.isJvmCreated()) {
   jinst.addOption("-Xrs");
   jinst.setupClasspath([
-    "./lib/hive-jdbc-1.2.0-mapr-1611-standalone.jar",
-    "./lib/hadoop-common-2.7.0-mapr-1707-javadoc.jar",
-    "./lib/mysql-connector-java-5.1.23-bin.jar"
+    "./lib/hive-jdbc-1.2.0-standalone.jar",
+    "./lib/hadoop-common-2.7.0-javadoc.jar"
   ]);
 }
 
 
 var conf = {
   url: "jdbc:mysql://localhost/workspace_dev?user=root&password=root",
-  // drivername: "org.apache.hive.jdbc.HiveDriver",
-     drivername: "com.mysql.jdbc.Driver",
+  drivername: "org.apache.hive.jdbc.HiveDriver",
+  //    drivername: "com.mysql.jdbc.Driver",
   properties: {}
 };
 
