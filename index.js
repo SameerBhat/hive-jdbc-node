@@ -8,7 +8,8 @@ if (!jinst.isJvmCreated()) {
   jinst.addOption("-Xrs");
   jinst.setupClasspath([
     "./lib/hive-jdbc-1.2.0-mapr-1611-standalone.jar",
-    "./lib/hadoop-common-2.7.0-mapr-1707-javadoc.jar"
+    "./lib/hadoop-common-2.7.0-mapr-1707-javadoc.jar",
+    "./lib/mysql-connector-java-5.1.23-bin.jar"
   ]);
 }
 
