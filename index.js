@@ -160,12 +160,14 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction) {
+
+  
   conn.createStatement(function (err, statement) {
     if (err) {
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeUpdate(`INSERT INTO table ${tableName} values ('${data[0]}','${data[1]}','${data[2]}','${data[3]}','${data[4]}','${data[5]}','${data[6]}','${data[7]}','${data[8]}','${data[9]}','${data[10]}','${data[11]}','${data[12]}','${data[13]}','${data[14]}','${data[15]}','${data[16]}','${data[17]}','${data[18]}','${data[19]}','${data[20]}','${data[21]}','${data[22]}','${data[23]}');`, function (
+      statement.executeUpdate(`INSERT INTO table ${tableName} values ('${escape(data[0])}','${escape(data[1])}','${escape(data[2])}','${escape(data[3])}','${escape(data[4])}','${escape(data[5])}','${escape(data[6])}','${escape(data[7])}','${escape(data[8])}','${escape(data[9])}','${escape(data[10])}','${escape(data[11])}','${escape(data[12])}','${escape(data[13])}','${escape(data[14])}','${escape(data[15])}','${escape(data[16])}','${escape(data[17])}','${escape(data[18])}','${escape(data[19])}','${escape(data[20])}','${escape(data[21])}','${escape(data[22])}','${escape(data[23])}');`, function (
         err,
         resultset
       ) {
