@@ -67,7 +67,7 @@ hive.reserve(function (err, connObj) {
 
       console.log(tableName);
       console.log(fnum);
-      console.log
+      
 
      
 
