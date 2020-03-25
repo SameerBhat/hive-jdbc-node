@@ -12,4 +12,7 @@ scp -P 2200 index.js sameer@localhost:/home/sameer/node
 
 
 curl http://localhost:1212/api/transcripts/dom_nap_raw_trans_data/6
-http://10.0.2.15:1212/api/transcripts/dom_nap_raw_trans_data/6
+
+scp -P 2200 index.js sameer@localhost:/home/sameer/node
+
+scp -P 2200 package.json sameer@localhost:/home/sameer/node

@@ -1,8 +1,9 @@
 var JDBC = require("jdbc");
 var jinst = require("jdbc/lib/jinst");
+var cors = require('cors');
 var express = require('express');
 var app = express();
-
+app.use(cors());
 //create a jvm and specify the jars required in the classpath and other jvm parameters
 if (!jinst.isJvmCreated()) {
   jinst.addOption("-Xrs");
@@ -57,6 +58,22 @@ hive.reserve(function (err, connObj) {
 
 
     });
+
+
+
+    app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
+      const tableName = req.params.tableName;
+      const fnum = req.params.fnum;
+
+      console.log(tableName);
+      console.log(fnum);
+      console.log
+
+     
+
+
+    });
+
 
     console.log("app is listening at port http://localhost:1212")
     app.listen(1212)
