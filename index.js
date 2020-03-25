@@ -3,7 +3,11 @@ var jinst = require("jdbc/lib/jinst");
 var cors = require('cors');
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 app.use(cors());
+app.use(bodyParser.json());
+
+
 //create a jvm and specify the jars required in the classpath and other jvm parameters
 if (!jinst.isJvmCreated()) {
   jinst.addOption("-Xrs");
@@ -31,6 +35,7 @@ hive.initialize(function (err) {
     console.log("error from lime 35")
   }
 });
+
 hive.reserve(function (err, connObj) {
   if (connObj) {
     //console.log("Connection : " + connObj.uuid);
@@ -41,7 +46,7 @@ hive.reserve(function (err, connObj) {
       const fnum = req.params.fnum;
 
       getItemsFromDB(conn, tableName, fnum, function (data) {
-          console.log(data);
+        //  console.log(data);
           res.send(JSON.stringify(data));
 
 
@@ -64,11 +69,9 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName;
       const fnum = req.params.fnum;
-      console.log(fnum);
       console.log(tableName);
-      
-      
-
+      console.log(fnum);
+      console.log(req.body);
     });
 
 
