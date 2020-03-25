@@ -14,8 +14,9 @@ if (!jinst.isJvmCreated()) {
 
 
 var conf = {
-  url: "jdbc://localhost/workspace_dev?user=root&password=root",
-  drivername: "org.apache.hive.jdbc.HiveDriver",
+  url: "jdbc:mysql://localhost/workspace_dev?user=root&password=root",
+  // drivername: "org.apache.hive.jdbc.HiveDriver",
+     drivername: "com.mysql.jdbc.Driver",
   properties: {}
 };
 
