@@ -87,7 +87,7 @@ hive.reserve(function (err, connObj) {
 
 
         insertItemsToDB(conn, tableName, data, function (data) {
-           // console.log(data);
+            console.log(data);
            // res.send(JSON.stringify(data))
   
           }, function (error) {
@@ -187,8 +187,15 @@ function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction)
           errorFunction(err);
         } else {
           
-           console.log(resultset);
+           //console.log(resultset);
 
+           if(resultset == 1){
+            callbackFunction('ok')
+           }else{
+            errorFunction('error');
+           }
+
+          //  if(resultset == true)
           // resultset.toObjArray(function (err, result) {
           //   if (result != null) {
 
