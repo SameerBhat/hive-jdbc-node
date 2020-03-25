@@ -1,25 +1,22 @@
 var express = require('express');
+var cors = require('cors');
 var app= express();
-
-
-var result = [ { foo: 1, bar: 'a' },
-{ foo: 2, bar: 'b' },
-{ foo: 3, bar: 'c' },
-{ foo: 4, bar: 'd' },
-{ foo: 5, bar: 'e' },
-{ foo: 6, bar: 'f' },
-{ foo: 7, bar: 'g' },
-{ foo: 8, bar: 'h' },
-{ foo: 9, bar: 'i' },
-{ foo: 10, bar: 'j' } ];
-
+const fs = require('fs');
+app.use(cors())
 
 
 app.get('/api/transcripts/:tableName/:limit', function (req, res) {
     const tableName = req.params.tableName;
     const limit = req.params.limit;
+
+    fs.readFile('./test_response.json',"utf8", function read(err, data) {
+      if (err) {
+          throw err;
+      }
+      res.send(data);
+  });
     
-    res.send(JSON.stringify(result));
+    
 
   })
 
