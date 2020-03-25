@@ -77,16 +77,16 @@ hive.reserve(function (err, connObj) {
 
         var newdata = [];
 
-        data.forEach(element => {
+        // data.forEach(element => {
 
-          var item = element ? element.replace(/[^\w\s]/gi, ' ') : null;
+        //   var item = element ? element.replace(/[^\w\s]/gi, ' ') : null;
 
-          newdata.push(item);
-        });
+        //   newdata.push(item);
+        // });
 
 
 
-        insertItemsToDB(conn, tableName, newdata, function (data) {
+        insertItemsToDB(conn, tableName, data, function (data) {
            // console.log(data);
            // res.send(JSON.stringify(data))
   
