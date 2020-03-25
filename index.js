@@ -64,13 +64,10 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName;
       const fnum = req.params.fnum;
-
-      console.log(tableName);
       console.log(fnum);
+      console.log(tableName);
       
-
-     
-
+      
 
     });
 
