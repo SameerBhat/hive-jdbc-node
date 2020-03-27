@@ -71,7 +71,7 @@ hive.reserve(function (err, connObj) {
         var newdata = [];
 
         data.forEach(element => {
-          var item = element ? element.replace(/'/g,"\\'") : NULL;
+          var item = element ? element.replace(/'/g,"\\'") : null;
           newdata.push(item);
         });
 
@@ -166,7 +166,10 @@ function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction)
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeUpdate(`INSERT INTO ${tableName} values ('${data[0]}','${data[1]}','${data[2]}','${data[3]}','${data[4]}','${data[5]}','${data[6]}','${data[7]}','${data[8]}','${data[9]}','${data[10]}','${data[11]}','${data[12]}','${data[13]}','${data[14]}','${data[15]}','${data[16]}','${data[17]}','${data[18]}','${data[19]}','${data[20]}','${data[21]}','${data[22]}','${data[23]}');`, function (
+      statement.executeUpdate(`INSERT INTO ${tableName}
+        (fnum,line ,time ,speaker ,paragraph ,annotators_name ,promise1 ,pwrd1 ,promise_phrase1 ,promise2 ,pwrd2 ,promise_phrase2 ,promise_comment ,TOPIC1 ,twrd1 ,pharse1 ,TOPIC2 ,twrd2 ,pharse2 ,sentiment_phrase1 ,sentiment_phrase2 ,cpn_name ,agent ,customer) 
+        values 
+        ('${data[0]}','${data[1]}','${data[2]}','${data[3]}','${data[4]}','${data[5]}','${data[6]}','${data[7]}','${data[8]}','${data[9]}','${data[10]}','${data[11]}','${data[12]}','${data[13]}','${data[14]}','${data[15]}','${data[16]}','${data[17]}','${data[18]}','${data[19]}','${data[20]}','${data[21]}','${data[22]}','${data[23]}');`, function (
         err,
         resultset
       ) {
