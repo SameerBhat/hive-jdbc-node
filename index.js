@@ -176,7 +176,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName,columns, data, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName, columns, values, callbackFunction, errorFunction) {
 
   
   conn.createStatement(function (err, statement) {
