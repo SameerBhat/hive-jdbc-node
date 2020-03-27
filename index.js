@@ -67,19 +67,33 @@ hive.reserve(function (err, connObj) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
 
-      var firstRowTitlesInsert = [...firstRowTitles];
-     
-      req.body.forEach((data, index) => {
-        console.log(index);
+      
+      req.body.forEach((data) => {
+        //console.log(data);
 
         var newdata = [];
+        var firstRowTitlesInsert = [...firstRowTitles];
+     
+        data.forEach((element, index) => {
 
-        data.forEach(element => {
-          var item = element ? element.replace(/'/g,"\\'") : null;
-          newdata.push(item);
+          if(element == null){
+            firstRowTitlesInsert.splice(index, 1);
+           
+          }else{
+            element.replace(/'/g,"\\'") ;
+            newdata.push(`'${item}'`);
+          }
+          //var item = element ? element.replace(/'/g,"\\'") : null;
         });
 
-        insertItemsToDB(conn, tableName, newdata, function (data) {
+
+        const columns = firstRowTitlesInsert.join(",");
+        const values = newdata.join(",")
+
+
+
+
+        insertItemsToDB(conn, tableName, columns, values, function (data) {
             console.log(data);
            // res.send(JSON.stringify(data))
           }, function (error) {
@@ -162,7 +176,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName,columns, data, callbackFunction, errorFunction) {
 
   
   conn.createStatement(function (err, statement) {
@@ -170,10 +184,7 @@ function insertItemsToDB(conn, tableName, data, callbackFunction, errorFunction)
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeUpdate(`INSERT INTO ${tableName}
-        (fnum,line ,time ,speaker ,paragraph ,annotators_name ,promise1 ,pwrd1 ,promise_phrase1 ,promise2 ,pwrd2 ,promise_phrase2 ,promise_comment ,TOPIC1 ,twrd1 ,pharse1 ,TOPIC2 ,twrd2 ,pharse2 ,sentiment_phrase1 ,sentiment_phrase2 ,cpn_name ,agent ,customer) 
-        values 
-        ('${data[0]}','${data[1]}','${data[2]}','${data[3]}','${data[4]}','${data[5]}','${data[6]}','${data[7]}','${data[8]}','${data[9]}','${data[10]}','${data[11]}','${data[12]}','${data[13]}','${data[14]}','${data[15]}','${data[16]}','${data[17]}','${data[18]}','${data[19]}','${data[20]}','${data[21]}','${data[22]}','${data[23]}');`, function (
+      statement.executeUpdate(`INSERT INTO ${tableName} (${columns}) values  (${values});`, function (
         err,
         resultset
       ) {
