@@ -77,7 +77,7 @@ hive.reserve(function (err, connObj) {
         data.forEach((element, index) => {
 
           if(element == null){
-            firstRowTitlesInsert.splice(index, 1);
+            firstRowTitlesInsert = [...firstRowTitles].splice(index, 1);
            
           }else{
             const item = element.replace(/'/g,"\\'") ;
