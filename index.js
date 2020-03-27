@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.json());
 
+const firstRowTitles = ["fnum","line","time","speaker","paragraph","annotators_name","promise1","pwrd1","promise_phrase1","promise2","pwrd2","promise_phrase2","promise_comment","TOPIC1","twrd1","pharse1","TOPIC2","twrd2","pharse2","sentiment_phrase1","sentiment_phrase2","cpn_name","agent","customer"];
+
 
 //create a jvm and specify the jars required in the classpath and other jvm parameters
 if (!jinst.isJvmCreated()) {
@@ -64,9 +66,11 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
+
+      var firstRowTitlesInsert = [...firstRowTitles];
      
-      req.body.forEach(data => {
-        console.log(data);
+      req.body.forEach((data, index) => {
+        console.log(index);
 
         var newdata = [];
 
