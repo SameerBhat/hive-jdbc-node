@@ -63,21 +63,17 @@ hive.reserve(function (err, connObj) {
 
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
-   //   const tableName = 'dom_nap_raw_trans_data';
       const fnum = req.params.fnum;
-     // console.log(tableName);
-      //console.log(fnum);
+     
       req.body.forEach(data => {
         console.log(data);
 
         var newdata = [];
 
         data.forEach(element => {
-          var item = element ? element.replace(/'/g,"\\'") : null;
+          var item = element ? element.replace(/'/g,"\\'") : NULL;
           newdata.push(item);
         });
-
-
 
         insertItemsToDB(conn, tableName, newdata, function (data) {
             console.log(data);
