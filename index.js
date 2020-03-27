@@ -80,7 +80,7 @@ hive.reserve(function (err, connObj) {
             firstRowTitlesInsert.splice(index, 1);
            
           }else{
-            element.replace(/'/g,"\\'") ;
+            const item = element.replace(/'/g,"\\'") ;
             newdata.push(`'${item}'`);
           }
           //var item = element ? element.replace(/'/g,"\\'") : null;
