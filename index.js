@@ -66,18 +66,17 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
-
-      
+      res.send("okk");
+      return;
       req.body.forEach((data) => {
         //console.log(data);
-
         var newdata = [];
         var firstRowTitlesInsert = [...firstRowTitles];
      
         data.forEach((element, index) => {
 
           if(element == null){
-            firstRowTitlesInsert = [...firstRowTitles].splice(index, 1);
+            firstRowTitlesInsert.splice(index, 1);
            
           }else{
             const item = element.replace(/'/g,"\\'") ;
