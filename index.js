@@ -38,7 +38,6 @@ hive.initialize(function (err) {
 
 hive.reserve(function (err, connObj) {
   if (connObj) {
-    //console.log("Connection : " + connObj.uuid);
     var conn = connObj.conn;
 
     app.get('/api/transcripts/:tableName/:fnum', function (req, res) {
@@ -46,11 +45,7 @@ hive.reserve(function (err, connObj) {
       const fnum = req.params.fnum;
 
       getItemsFromDB(conn, tableName, fnum, function (data) {
-        //  console.log(data);
           res.send(JSON.stringify(data));
-
-
-
         }, function (error) {
 
           if (error != null) {
@@ -67,8 +62,8 @@ hive.reserve(function (err, connObj) {
 
 
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
-      //const tableName = 'label_'+req.params.tableName;
-      const tableName = 'label_dom_nap_raw_trans_data';
+      const tableName = req.params.tableName.replace('_raw_', '_labeled_');
+   //   const tableName = 'dom_nap_raw_trans_data';
       const fnum = req.params.fnum;
      // console.log(tableName);
       //console.log(fnum);
@@ -78,9 +73,7 @@ hive.reserve(function (err, connObj) {
         var newdata = [];
 
         data.forEach(element => {
-
           var item = element ? element.replace(/'/g,"\\'") : null;
-
           newdata.push(item);
         });
 
@@ -89,7 +82,6 @@ hive.reserve(function (err, connObj) {
         insertItemsToDB(conn, tableName, newdata, function (data) {
             console.log(data);
            // res.send(JSON.stringify(data))
-  
           }, function (error) {
   
             if (error != null) {
