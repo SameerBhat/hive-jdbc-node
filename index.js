@@ -68,6 +68,9 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
+
+      const totalRowsLength = req.body.length | 0;
+      var currentRowIndex = 0;
    
       req.body.forEach((rowArray) => {
        // console.log(rowArray);
@@ -77,11 +80,7 @@ hive.reserve(function (err, connObj) {
      
        
         rowArray.forEach((cellItem, index) => {
-          if(cellItem == null || cellItem == ''){
-            console.log("cellItem null executed "+index);
-           
-           
-          }else{
+          if(cellItem != null || cellItem != ''){
             console.log("cellItem else executed "+index);
             const item = cellItem.replace(/'/g,"\\'") ;
             currentRowTitles.push(firstRowTitles[index]);
@@ -98,8 +97,8 @@ hive.reserve(function (err, connObj) {
 
 
         insertItemsToDB(conn, tableName, columns, values, function (data) {
-            console.log(data);
-            res.send(data);
+            console.log(`total rows : ${totalRowsLength}, current row: ${currentRowIndex}`);
+          //  res.send(data);
            // res.send(JSON.stringify(data))
           }, function (error) {
             if (error != null) {
@@ -111,7 +110,7 @@ hive.reserve(function (err, connObj) {
   
         );
 
-
+        currentRowIndex++;
       });
       
     });
