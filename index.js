@@ -73,8 +73,7 @@ hive.reserve(function (err, connObj) {
       var receivedRowsLength = 0;
    
       req.body.forEach((rowArray, rowIndex) => {
-       // console.log(rowArray);
-    
+     
         var newdata = [];
         const currentRowTitles = [];
      
@@ -85,7 +84,6 @@ hive.reserve(function (err, connObj) {
             currentRowTitles.push(firstRowTitles[index]);
             newdata.push(`'${item}'`);
           }
-          //var item = cellItem ? cellItem.replace(/'/g,"\\'") : null;
         });
 
      
@@ -110,8 +108,6 @@ hive.reserve(function (err, connObj) {
           }
 
           
-          //  res.send(data);
-           // res.send(JSON.stringify(data))
           }, function (error) {
             if (error != null) {
               res.send({status: "error", message: "Something went wrong while saving data"});
