@@ -87,6 +87,7 @@ hive.reserve(function (err, connObj) {
         });
 
 
+        console.log("this should not execute before other")
         const columns = firstRowTitlesInsert.join(",");
         const values = newdata.join(",")
 
