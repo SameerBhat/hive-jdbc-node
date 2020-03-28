@@ -180,9 +180,6 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 function insertItemsToDB(conn, tableName, columns, values, callbackFunction, errorFunction) {
 
-  console.log(`INSERT INTO ${tableName} (${columns}) values  (${values});`);
-  return;
-
   
   conn.createStatement(function (err, statement) {
     if (err) {
