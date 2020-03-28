@@ -51,6 +51,8 @@ hive.reserve(function (err, connObj) {
         }, function (error) {
 
           if (error != null) {
+            res.status(404)        // HTTP status 404: NotFound
+            .send(JSON.stringify(error));
             console.log(error);
           }
 
