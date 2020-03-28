@@ -99,10 +99,11 @@ hive.reserve(function (err, connObj) {
 
         insertItemsToDB(conn, tableName, columns, values, function (data) {
             console.log(data);
+            res.send(data);
            // res.send(JSON.stringify(data))
           }, function (error) {
-  
             if (error != null) {
+              res.send("error");
               console.log(error);
             }
   
