@@ -70,9 +70,9 @@ hive.reserve(function (err, connObj) {
       const fnum = req.params.fnum;
 
       const totalRowsLength = req.body.length | 0;
-      var currentRowIndex = 0;
+      var receivedRowsLength = 0;
    
-      req.body.forEach((rowArray) => {
+      req.body.forEach((rowArray, rowIndex) => {
        // console.log(rowArray);
     
         var newdata = [];
@@ -94,9 +94,17 @@ hive.reserve(function (err, connObj) {
         const values = newdata.join(",")
 
 
-        insertItemsToDB(conn, tableName, columns, values, currentRowIndex, function (data) {
+        insertItemsToDB(conn, tableName, columns, values, function (data) {
 
-            console.log(`total rows : ${totalRowsLength}, current row: ${data}`);
+          if(data == "ok"){
+            receivedRowsLength++;
+            console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
+
+          }else{
+            console.log("there was an error in inserting row number "+rowIndex);
+          }
+
+          
           //  res.send(data);
            // res.send(JSON.stringify(data))
           }, function (error) {
@@ -109,7 +117,7 @@ hive.reserve(function (err, connObj) {
   
         );
 
-        currentRowIndex++;
+   
       });
       
     });
@@ -179,7 +187,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName, columns, values, currentRowIndex, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName, columns, values, callbackFunction, errorFunction) {
 
   
   conn.createStatement(function (err, statement) {
@@ -196,7 +204,7 @@ function insertItemsToDB(conn, tableName, columns, values, currentRowIndex, call
           errorFunction(err);
         } else {
            if(resultset == 1){
-            callbackFunction(currentRowIndex)
+            callbackFunction("ok")
            }else{
             errorFunction('error');
            }
