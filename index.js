@@ -81,7 +81,6 @@ hive.reserve(function (err, connObj) {
        
         rowArray.forEach((cellItem, index) => {
           if(cellItem == null || cellItem == ''){}else {
-            console.log("cellItem else executed "+index);
             const item = cellItem.replace(/'/g,"\\'") ;
             currentRowTitles.push(firstRowTitles[index]);
             newdata.push(`'${item}'`);
@@ -89,15 +88,15 @@ hive.reserve(function (err, connObj) {
           //var item = cellItem ? cellItem.replace(/'/g,"\\'") : null;
         });
 
-        console.log("this should not execute before other")
-
+     
         const columns = currentRowTitles.join(",");
    
         const values = newdata.join(",")
 
 
-        insertItemsToDB(conn, tableName, columns, values, function (data) {
-            console.log(`total rows : ${totalRowsLength}, current row: ${currentRowIndex}`);
+        insertItemsToDB(conn, tableName, columns, values, currentRowIndex, function (data) {
+
+            console.log(`total rows : ${totalRowsLength}, current row: ${data}`);
           //  res.send(data);
            // res.send(JSON.stringify(data))
           }, function (error) {
@@ -180,7 +179,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName, columns, values, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName, columns, values, currentRowIndex, callbackFunction, errorFunction) {
 
   
   conn.createStatement(function (err, statement) {
@@ -196,11 +195,8 @@ function insertItemsToDB(conn, tableName, columns, values, callbackFunction, err
           console.log(err);
           errorFunction(err);
         } else {
-          
-           //console.log(resultset);
-
            if(resultset == 1){
-            callbackFunction('ok')
+            callbackFunction(currentRowIndex)
            }else{
             errorFunction('error');
            }
