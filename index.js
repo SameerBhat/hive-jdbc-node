@@ -66,8 +66,7 @@ hive.reserve(function (err, connObj) {
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
-      res.send("okk");
-      return;
+   
       req.body.forEach((data) => {
         //console.log(data);
         var newdata = [];
@@ -76,9 +75,11 @@ hive.reserve(function (err, connObj) {
         data.forEach((element, index) => {
 
           if(element == null){
+            console.log("element null executed "+index);
             firstRowTitlesInsert.splice(index, 1);
            
           }else{
+            console.log("element else executed "+index);
             const item = element.replace(/'/g,"\\'") ;
             newdata.push(`'${item}'`);
           }
@@ -88,8 +89,6 @@ hive.reserve(function (err, connObj) {
 
         const columns = firstRowTitlesInsert.join(",");
         const values = newdata.join(",")
-
-
 
 
         insertItemsToDB(conn, tableName, columns, values, function (data) {
