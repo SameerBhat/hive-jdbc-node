@@ -71,11 +71,10 @@ hive.reserve(function (err, connObj) {
        // console.log(rowArray);
     
         var newdata = [];
+        const firstRowTitlesInsert = [...firstRowTitles];
+     
        
         rowArray.forEach((cellItem, index) => {
-          var firstRowTitlesInsert = [...firstRowTitles];
-     
-
           if(cellItem == null){
             console.log("cellItem null executed "+index);
             firstRowTitlesInsert.splice(index, 1);
@@ -88,9 +87,10 @@ hive.reserve(function (err, connObj) {
           //var item = cellItem ? cellItem.replace(/'/g,"\\'") : null;
         });
 
-
         console.log("this should not execute before other")
+
         const columns = firstRowTitlesInsert.join(",");
+        console.log(columns);
         const values = newdata.join(",")
 
 
