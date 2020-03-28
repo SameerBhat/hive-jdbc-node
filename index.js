@@ -67,24 +67,25 @@ hive.reserve(function (err, connObj) {
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
       const fnum = req.params.fnum;
    
-      req.body.forEach((data) => {
-        console.log(data);
-        return;
+      req.body.forEach((rowArray) => {
+       // console.log(rowArray);
+    
         var newdata = [];
-        var firstRowTitlesInsert = [...firstRowTitles];
+       
+        rowArray.forEach((cellItem, index) => {
+          var firstRowTitlesInsert = [...firstRowTitles];
      
-        data.forEach((element, index) => {
 
-          if(element == null){
-            console.log("element null executed "+index);
+          if(cellItem == null){
+            console.log("cellItem null executed "+index);
             firstRowTitlesInsert.splice(index, 1);
            
           }else{
-            console.log("element else executed "+index);
-            const item = element.replace(/'/g,"\\'") ;
+            console.log("cellItem else executed "+index);
+            const item = cellItem.replace(/'/g,"\\'") ;
             newdata.push(`'${item}'`);
           }
-          //var item = element ? element.replace(/'/g,"\\'") : null;
+          //var item = cellItem ? cellItem.replace(/'/g,"\\'") : null;
         });
 
 
