@@ -100,8 +100,13 @@ hive.reserve(function (err, connObj) {
             receivedRowsLength++;
             console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
 
+            if(totalRowsLength == receivedRowsLength){
+              res.send({status: "success", message: "All records inserted successfuly"})
+            }
+
           }else{
             console.log("there was an error in inserting row number "+rowIndex);
+            res.send({status: "error", message: "Error saving some records at row "+rowIndex})
           }
 
           
@@ -109,7 +114,7 @@ hive.reserve(function (err, connObj) {
            // res.send(JSON.stringify(data))
           }, function (error) {
             if (error != null) {
-              res.send("error");
+              res.send({status: "error", message: "Something went wrong while saving data"});
               console.log(error);
             }
   
