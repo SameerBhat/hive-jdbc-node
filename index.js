@@ -68,7 +68,8 @@ hive.reserve(function (err, connObj) {
       const fnum = req.params.fnum;
    
       req.body.forEach((data) => {
-        //console.log(data);
+        console.log(data);
+        return;
         var newdata = [];
         var firstRowTitlesInsert = [...firstRowTitles];
      
