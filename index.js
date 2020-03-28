@@ -75,7 +75,7 @@ hive.reserve(function (err, connObj) {
      
        
         rowArray.forEach((cellItem, index) => {
-          if(cellItem == null){
+          if(cellItem == null || cellItem == ''){
             console.log("cellItem null executed "+index);
             firstRowTitlesInsert.splice(index, 1);
            
@@ -90,7 +90,7 @@ hive.reserve(function (err, connObj) {
         console.log("this should not execute before other")
 
         const columns = firstRowTitlesInsert.join(",");
-        console.log(columns);
+   
         const values = newdata.join(",")
 
 
