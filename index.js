@@ -71,7 +71,9 @@ hive.reserve(function (err, connObj) {
 
       const totalRowsLength = req.body.length | 0;
       var receivedRowsLength = 0;
-   
+      var sqlqueries = [];
+
+
       req.body.forEach((rowArray, rowIndex) => {
      
         var newdata = [];
@@ -88,19 +90,22 @@ hive.reserve(function (err, connObj) {
 
      
         const columns = currentRowTitles.join(",");
+        const values = newdata.join(",");
+        sqlqueries.push(`INSERT INTO ${tableName} (${columns}) values  (${values});`);
+
+     
    
-        const values = newdata.join(",")
+      });
 
 
-        insertItemsToDB(conn, tableName, columns, values, function (data) {
+
+         insertItemsToDB(conn, tableName, sqlqueries, function (data) {
 
           if(data == "ok"){
-            receivedRowsLength++;
+           
             console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
-
-            if(totalRowsLength == receivedRowsLength){
-              res.send({status: "success", message: "All records inserted successfuly"})
-            }
+            res.send({status: "success", message: "All records inserted successfuly"})
+            
 
           }else{
             console.log("there was an error in inserting row number "+rowIndex);
@@ -118,8 +123,6 @@ hive.reserve(function (err, connObj) {
   
         );
 
-   
-      });
       
     });
 
@@ -188,7 +191,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName, columns, values, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName, sqlqueries, callbackFunction, errorFunction) {
 
   
   conn.createStatement(function (err, statement) {
@@ -196,7 +199,7 @@ function insertItemsToDB(conn, tableName, columns, values, callbackFunction, err
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeUpdate(`INSERT INTO ${tableName} (${columns}) values  (${values});`, function (
+      statement.executeUpdate(sqlqueries.join(" "), function (
         err,
         resultset
       ) {
