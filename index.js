@@ -194,15 +194,14 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 function insertItemsToDB(conn, tableName, sqlqueries, callbackFunction, errorFunction) {
-  console.log(sqlqueries.join(" ## "))
-          return;
+ 
   
   conn.createStatement(function (err, statement) {
     if (err) {
       errorFunction(err);
     } else {
       // console.log("Executing query.");
-      statement.executeUpdate(sqlqueries.join(" "), function (
+      statement.executeUpdate(sqlqueries[0], function (
         err,
         resultset
       ) {
