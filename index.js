@@ -101,6 +101,9 @@ hive.reserve(function (err, connObj) {
 
          insertItemsToDB(conn, tableName, sqlqueries, function (data) {
 
+            console.log(sqlqueries.join(" ## "))
+          return;
+
           if(data == "ok"){
            
             console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
