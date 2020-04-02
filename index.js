@@ -37,7 +37,7 @@ var hive = new JDBC(conf);
       const tableName = req.params.tableName;
       const fnum = req.params.fnum;
 
-      getItemsFromDB(conn, tableName, fnum, function (data) {
+      getItemsFromDB(tableName, fnum, function (data) {
           res.send(JSON.stringify(data));
         }, function (error) {
 
@@ -90,7 +90,7 @@ var hive = new JDBC(conf);
 
 
 
-         insertItemsToDB(conn, tableName, sqlqueries, function (data) {
+         insertItemsToDB(tableName, sqlqueries, function (data) {
 
           
 
@@ -131,7 +131,7 @@ var hive = new JDBC(conf);
 
 
 
-function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) {
+function getItemsFromDB( tableName, fnum, callbackFunction, errorFunction) {
 
 
   hive.initialize(function (err) {
@@ -198,7 +198,7 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 
-function insertItemsToDB(conn, tableName, sqlqueries, callbackFunction, errorFunction) {
+function insertItemsToDB(tableName, sqlqueries, callbackFunction, errorFunction) {
 
 
   hive.initialize(function (err) {
