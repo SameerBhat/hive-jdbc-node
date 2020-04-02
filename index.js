@@ -101,8 +101,7 @@ hive.reserve(function (err, connObj) {
 
          insertItemsToDB(conn, tableName, sqlqueries, function (data) {
 
-            console.log(sqlqueries.join(" ## "))
-          return;
+          
 
           if(data == "ok"){
            
@@ -195,7 +194,8 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 function insertItemsToDB(conn, tableName, sqlqueries, callbackFunction, errorFunction) {
-
+  console.log(sqlqueries.join(" ## "))
+          return;
   
   conn.createStatement(function (err, statement) {
     if (err) {
