@@ -82,7 +82,7 @@ hive.reserve(function (err, connObj) {
        
         rowArray.forEach((cellItem, index) => {
           if(cellItem == null || cellItem == ''){}else {
-            const item = cellItem.replace(/'/g,"\\'") ;
+            const item = cellItem.toString().replace(/'/g,"\\'") ;
             currentRowTitles.push(firstRowTitles[index]);
             newdata.push(`'${item}'`);
           }
