@@ -31,16 +31,7 @@ var hive = new JDBC(conf);
 
 //initialize the connection
 
-hive.initialize(function (err) {
-  if (err) {
-    console.log(err);
-    console.log("error from lime 35")
-  }
-});
 
-hive.reserve(function (err, connObj) {
-  if (connObj) {
-    var conn = connObj.conn;
 
     app.get('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName;
@@ -132,11 +123,7 @@ hive.reserve(function (err, connObj) {
     console.log("app is listening at port http://localhost:1212")
     app.listen(1212)
 
-
-  } else {
-    console.log("couldnt create connection")
-  }
-});
+    
 
 
 
@@ -145,48 +132,66 @@ hive.reserve(function (err, connObj) {
 
 
 function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) {
-  conn.createStatement(function (err, statement) {
+
+
+  hive.initialize(function (err) {
     if (err) {
-      errorFunction(err);
-    } else {
-      // console.log("Executing query.");
-      statement.executeQuery("SELECT * FROM " + tableName + " WHERE fnum='" + fnum+"'", function (
-        err,
-        resultset
-      ) {
+      console.log(err);
+      console.log("error from lime 35")
+    }
+  });
+  
+  hive.reserve(function (err, connObj) {
+    if (connObj) {
+      var conn = connObj.conn;
+
+      conn.createStatement(function (err, statement) {
         if (err) {
-          console.log(err);
           errorFunction(err);
         } else {
-          // console.log("Query Output :");
-          resultset.toObjArray(function (err, result) {
-            if (result != null) {
-
-              if (result.length > 0) {
-
-                callbackFunction(result);
-                // console.log("foo :" + util.inspect(result));
-
-
-                // for (var i = 0; i < result.length; i++) {
-                //   var row = result[i];
-                //   console.log(row["foo"]);
-                // }
-              } else {
-                callbackFunction([]);
-              }
+          // console.log("Executing query.");
+          statement.executeQuery("SELECT * FROM " + tableName + " WHERE fnum='" + fnum+"'", function (
+            err,
+            resultset
+          ) {
+            if (err) {
+              console.log(err);
+              errorFunction(err);
             } else {
-              callbackFunction([]);
+              // console.log("Query Output :");
+              resultset.toObjArray(function (err, result) {
+                if (result != null) {
+    
+                  if (result.length > 0) {
+    
+                    callbackFunction(result);
+                    // console.log("foo :" + util.inspect(result));
+    
+    
+                    // for (var i = 0; i < result.length; i++) {
+                    //   var row = result[i];
+                    //   console.log(row["foo"]);
+                    // }
+                  } else {
+                    callbackFunction([]);
+                  }
+                } else {
+                  callbackFunction([]);
+                }
+                //errorFunction(null, resultset);
+              });
             }
-            //errorFunction(null, resultset);
           });
         }
       });
-    }
-  });
-
-
-
+    
+    
+    
+} else {
+  console.log("couldnt create connection")
+}
+});
+  
 
 
 }
@@ -194,41 +199,59 @@ function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) 
 
 
 function insertItemsToDB(conn, tableName, sqlqueries, callbackFunction, errorFunction) {
- 
-  
-  conn.createStatement(function (err, statement) {
+
+
+  hive.initialize(function (err) {
     if (err) {
-      errorFunction(err);
-    } else {
-      // console.log("Executing query.");
-      statement.executeUpdate(sqlqueries[0], function (
-        err,
-        resultset
-      ) {
-        if (err) {
-          console.log(err);
-          errorFunction(err);
-        } else {
-           if(resultset == 1){
-            callbackFunction("ok")
-           }else{
-            errorFunction('error');
-           }
-
-          //  if(resultset == true)
-          // resultset.toObjArray(function (err, result) {
-          //   if (result != null) {
-
-             
-          //   } else {
-          //     callbackFunction([]);
-          //   }
-           
-          // });
-        }
-      });
+      console.log(err);
+      console.log("error from lime 35")
     }
   });
+  
+  hive.reserve(function (err, connObj) {
+    if (connObj) {
+      var conn = connObj.conn;
+
+      conn.createStatement(function (err, statement) {
+        if (err) {
+          errorFunction(err);
+        } else {
+          // console.log("Executing query.");
+          statement.executeUpdate(sqlqueries[0], function (
+            err,
+            resultset
+          ) {
+            if (err) {
+              console.log(err);
+              errorFunction(err);
+            } else {
+               if(resultset == 1){
+                callbackFunction("ok")
+               }else{
+                errorFunction('error');
+               }
+    
+              //  if(resultset == true)
+              // resultset.toObjArray(function (err, result) {
+              //   if (result != null) {
+    
+                 
+              //   } else {
+              //     callbackFunction([]);
+              //   }
+               
+              // });
+            }
+          });
+        }
+      });
+} else {
+  console.log("couldnt create connection")
+}
+});
+ 
+  
+  
 
 
 
