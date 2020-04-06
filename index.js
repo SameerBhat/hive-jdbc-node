@@ -74,11 +74,11 @@ var hive = new JDBC(conf);
 
       for (let i = 0; i < csvDataArray.length; i++) {
         const row = csvDataArray[i];
-        for (let e = 0; e < csvDataArray[i].length; e++) {
-          csvDataArray[i][e] = csvDataArray[i][e]
-            .replace(/\n/g, "")
-            .trim();
-        }
+        // for (let e = 0; e < csvDataArray[i].length; e++) {
+        //   csvDataArray[i][e] = csvDataArray[i][e]
+        //     .replace(/\n/g, "")
+        //     .trim();
+        // }
         const rowString = row.join(",");
         csvStringArray.push(rowString);
       }
