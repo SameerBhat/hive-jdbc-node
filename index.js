@@ -4,6 +4,8 @@ var cors = require('cors');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var fs = require('fs');
+ 
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -57,64 +59,93 @@ var hive = new JDBC(conf);
 
 
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
+
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
+
       const fnum = req.params.fnum;
 
-      const totalRowsLength = req.body.length | 0;
-      var receivedRowsLength = 0;
-      var sqlqueries = [];
+    
+      var csvDataArray = req.body;
 
 
-      req.body.forEach((rowArray, rowIndex) => {
+      var csvStringArray = [];
+
+      csvStringArray.push(firstRowTitles.join(","));
+
+      for (let i = 0; i < csvDataArray.length; i++) {
+        const row = csvDataArray[i];
+        for (let e = 0; e < csvDataArray[i].length; e++) {
+          csvDataArray[i][e] = csvDataArray[i][e]
+            .replace(/\n/g, "")
+            .trim();
+        }
+        const rowString = row.join(",");
+        csvStringArray.push(rowString);
+      }
+
+
+      var csv = csvStringArray.join("\n");
+
+
+      fs.writeFile("test.csv", csv, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+
+      
+
+
+      // req.body.forEach((rowArray, rowIndex) => {
      
-        var newdata = [];
-        const currentRowTitles = [];
+      //   var newdata = [];
+      //   const currentRowTitles = [];
      
        
-        rowArray.forEach((cellItem, index) => {
-          if(cellItem == null || cellItem == ''){}else {
-            const item = cellItem.toString().replace(/'/g,"\\'") ;
-            currentRowTitles.push(firstRowTitles[index]);
-            newdata.push(`'${item}'`);
-          }
-        });
+      //   rowArray.forEach((cellItem, index) => {
+      //     if(cellItem == null || cellItem == ''){}else {
+      //       const item = cellItem.toString().replace(/'/g,"\\'") ;
+      //       currentRowTitles.push(firstRowTitles[index]);
+      //       newdata.push(`'${item}'`);
+      //     }
+      //   });
 
      
-        const columns = currentRowTitles.join(",");
-        const values = newdata.join(",");
-        sqlqueries.push(`INSERT INTO ${tableName} (${columns}) values  (${values});`);
+      //   const columns = currentRowTitles.join(",");
+      //   const values = newdata.join(",");
+      //   sqlqueries.push(`INSERT INTO ${tableName} (${columns}) values  (${values});`);
 
      
    
-      });
+      // });
 
 
 
-         insertItemsToDB(tableName, sqlqueries, function (data) {
+        //  insertItemsToDB(tableName, sqlqueries, function (data) {
 
           
 
-          if(data == "ok"){
+        //   if(data == "ok"){
            
-            console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
-            res.send({status: "success", message: "All records inserted successfuly"})
+        //     console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
+        //     res.send({status: "success", message: "All records inserted successfuly"})
             
 
-          }else{
-            console.log("there was an error in inserting row number "+rowIndex);
-            res.send({status: "error", message: "Error saving some records at row "+rowIndex})
-          }
+        //   }else{
+        //     console.log("there was an error in inserting row number "+rowIndex);
+        //     res.send({status: "error", message: "Error saving some records at row "+rowIndex})
+        //   }
 
           
-          }, function (error) {
-            if (error != null) {
-              res.send({status: "error", message: "Something went wrong while saving data"});
-              console.log(error);
-            }
+        //   }, function (error) {
+        //     if (error != null) {
+        //       res.send({status: "error", message: "Something went wrong while saving data"});
+        //       console.log(error);
+        //     }
+        //   }
   
-          }
-  
-        );
+        // );
 
       
     });
