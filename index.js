@@ -61,11 +61,9 @@ var hive = new JDBC(conf);
     app.post('/api/transcripts/:tableName/:fnum', function (req, res) {
 
       const tableName = req.params.tableName.replace('_raw_', '_labeled_');
-
       const fnum = req.params.fnum;
-
-    
       var csvDataArray = req.body;
+      const csvFileLocation = "/tmp/test.csv";
 
 
       var csvStringArray = [];
@@ -74,20 +72,12 @@ var hive = new JDBC(conf);
 
       for (let i = 0; i < csvDataArray.length; i++) {
         const row = csvDataArray[i];
-        // for (let e = 0; e < csvDataArray[i].length; e++) {
-        //   csvDataArray[i][e] = csvDataArray[i][e]
-        //     .replace(/\n/g, "")
-        //     .trim();
-        // }
         const rowString = row.join(",");
         csvStringArray.push(rowString);
       }
 
-
       var csv = csvStringArray.join("\n");
-
-
-      fs.writeFile("test.csv", csv, function(err) {
+      fs.writeFile(csvFileLocation, csv, function(err) {
         if(err) {
             return console.log(err);
         }
@@ -96,56 +86,29 @@ var hive = new JDBC(conf);
 
       
 
-
-      // req.body.forEach((rowArray, rowIndex) => {
-     
-      //   var newdata = [];
-      //   const currentRowTitles = [];
-     
-       
-      //   rowArray.forEach((cellItem, index) => {
-      //     if(cellItem == null || cellItem == ''){}else {
-      //       const item = cellItem.toString().replace(/'/g,"\\'") ;
-      //       currentRowTitles.push(firstRowTitles[index]);
-      //       newdata.push(`'${item}'`);
-      //     }
-      //   });
-
-     
-      //   const columns = currentRowTitles.join(",");
-      //   const values = newdata.join(",");
-      //   sqlqueries.push(`INSERT INTO ${tableName} (${columns}) values  (${values});`);
-
-     
-   
-      // });
-
-
-
-        //  insertItemsToDB(tableName, sqlqueries, function (data) {
+         insertItemsToDB(tableName, csvFileLocation, function (data) {
 
           
 
-        //   if(data == "ok"){
-           
-        //     console.log(`total rows : ${totalRowsLength}, Inserted rows: ${receivedRowsLength}`);
-        //     res.send({status: "success", message: "All records inserted successfuly"})
+          if(data == "ok"){
+          
+            res.send({status: "success", message: "All records inserted successfuly"})
             
 
-        //   }else{
-        //     console.log("there was an error in inserting row number "+rowIndex);
-        //     res.send({status: "error", message: "Error saving some records at row "+rowIndex})
-        //   }
+          }else{
+            console.log("there was an error in inserting row number "+rowIndex);
+            res.send({status: "error", message: "Error saving some records at row "+rowIndex})
+          }
 
           
-        //   }, function (error) {
-        //     if (error != null) {
-        //       res.send({status: "error", message: "Something went wrong while saving data"});
-        //       console.log(error);
-        //     }
-        //   }
+          }, function (error) {
+            if (error != null) {
+              res.send({status: "error", message: "Something went wrong while saving data"});
+              console.log(error);
+            }
+          }
   
-        // );
+        );
 
       
     });
@@ -229,13 +192,14 @@ function getItemsFromDB( tableName, fnum, callbackFunction, errorFunction) {
 
 
 
-function insertItemsToDB(tableName, sqlqueries, callbackFunction, errorFunction) {
+function insertItemsToDB(tableName, csvFileLocation, callbackFunction, errorFunction) {
 
 
   hive.initialize(function (err) {
     if (err) {
       console.log(err);
-      console.log("error from lime 35")
+      console.log("error from lime 200");
+      errorFunction(err);
     }
   });
   
@@ -248,7 +212,7 @@ function insertItemsToDB(tableName, sqlqueries, callbackFunction, errorFunction)
           errorFunction(err);
         } else {
           // console.log("Executing query.");
-          statement.executeUpdate(sqlqueries[0], function (
+          statement.executeUpdate(`LOAD DATA LOCAL INPATH '${csvFileLocation}' INTO TABLE ${tableName};`, function (
             err,
             resultset
           ) {
@@ -262,16 +226,7 @@ function insertItemsToDB(tableName, sqlqueries, callbackFunction, errorFunction)
                 errorFunction('error');
                }
     
-              //  if(resultset == true)
-              // resultset.toObjArray(function (err, result) {
-              //   if (result != null) {
-    
-                 
-              //   } else {
-              //     callbackFunction([]);
-              //   }
-               
-              // });
+             
             }
           });
         }
