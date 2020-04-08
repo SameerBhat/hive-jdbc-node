@@ -31,15 +31,27 @@ var conf = {
 
 var hive = new JDBC(conf);
 
-//initialize the connection
 
+
+//initialize the connection
+hive.initialize(function (err) {
+  if (err) {
+    console.log(err);
+    console.log("error from lime 35")
+  }
+});
+
+
+hive.reserve(function (err, connObj) {
+  if (connObj) {
+    var conn = connObj.conn;
 
 
     app.get('/api/transcripts/:tableName/:fnum', function (req, res) {
       const tableName = req.params.tableName;
       const fnum = req.params.fnum;
 
-      getItemsFromDB(tableName, fnum, function (data) {
+      getItemsFromDB(conn, tableName, fnum, function (data) {
           res.send(JSON.stringify(data));
         }, function (error) {
 
@@ -86,7 +98,7 @@ var hive = new JDBC(conf);
 
       
 
-         insertItemsToDB(tableName, csvFileLocation, function (data) {
+         insertItemsToDB(conn, tableName, csvFileLocation, function (data) {
 
           
 
@@ -118,6 +130,10 @@ var hive = new JDBC(conf);
     app.listen(1212)
 
     
+  } else {
+    console.log("couldnt create connection")
+  }
+});
 
 
 
@@ -125,20 +141,7 @@ var hive = new JDBC(conf);
 
 
 
-function getItemsFromDB( tableName, fnum, callbackFunction, errorFunction) {
-
-
-  hive.initialize(function (err) {
-    if (err) {
-      console.log(err);
-      console.log("error from lime 35")
-    }
-  });
-  
-  hive.reserve(function (err, connObj) {
-    if (connObj) {
-      var conn = connObj.conn;
-
+function getItemsFromDB(conn, tableName, fnum, callbackFunction, errorFunction) {
       conn.createStatement(function (err, statement) {
         if (err) {
           errorFunction(err);
@@ -159,13 +162,7 @@ function getItemsFromDB( tableName, fnum, callbackFunction, errorFunction) {
                   if (result.length > 0) {
     
                     callbackFunction(result);
-                    // console.log("foo :" + util.inspect(result));
-    
-    
-                    // for (var i = 0; i < result.length; i++) {
-                    //   var row = result[i];
-                    //   console.log(row["foo"]);
-                    // }
+                   
                   } else {
                     callbackFunction([]);
                   }
@@ -181,38 +178,22 @@ function getItemsFromDB( tableName, fnum, callbackFunction, errorFunction) {
     
     
     
-} else {
-  console.log("couldnt create connection")
-}
-});
-  
 
 
 }
 
 
 
-function insertItemsToDB(tableName, csvFileLocation, callbackFunction, errorFunction) {
+function insertItemsToDB(conn, tableName, csvFileLocation, callbackFunction, errorFunction) {
 
 
-  hive.initialize(function (err) {
-    if (err) {
-      console.log(err);
-      console.log("error from lime 200");
-      errorFunction(err);
-    }
-  });
-  
-  hive.reserve(function (err, connObj) {
-    if (connObj) {
-      var conn = connObj.conn;
 
       conn.createStatement(function (err, statement) {
         if (err) {
           errorFunction(err);
         } else {
           // console.log("Executing query.");
-          statement.executeUpdate(`LOAD DATA LOCAL INPATH '${csvFileLocation}' INTO TABLE ${tableName};`, function (
+          statement.executeUpdate("LOAD DATA LOCAL INPATH '$csvFileLocation' INTO TABLE $tableName;", function (
             err,
             resultset
           ) {
@@ -220,6 +201,9 @@ function insertItemsToDB(tableName, csvFileLocation, callbackFunction, errorFunc
               console.log(err);
               errorFunction(err);
             } else {
+              console.log("result set should be in next line");
+              console.log(resultset);
+
                if(resultset == 1){
                 callbackFunction("ok")
                }else{
@@ -231,11 +215,7 @@ function insertItemsToDB(tableName, csvFileLocation, callbackFunction, errorFunc
           });
         }
       });
-} else {
-  console.log("couldnt create connection")
-}
-});
- 
+
   
   
 
